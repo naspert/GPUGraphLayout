@@ -31,6 +31,15 @@
 
 namespace RPGraph
 {
+    UGraph::UGraph(json &json_object)
+    {
+        graph_input = json_object;
+        node_count = graph_input.at("nodes").size();
+        edge_count = graph_input.at("edges").size();
+        for (auto& x: graph_input.at("edges").items())
+        {
+        }
+    }
     /* Definitions for UGraph */
     UGraph::UGraph(std::string edgelist_path)
     {

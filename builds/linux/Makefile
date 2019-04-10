@@ -4,7 +4,7 @@ CC:=gcc
 L_SRC_DIR         := ../../lib
 SRC_DIR           := ../../src
 OBJ_DIR           := obj
-
+INCLUDES 	  	  := -I$(L_SRC_DIR)/pngwriter/src -I$(L_SRC_DIR)/json/single_include
 # Compile with CUDA support by default
 CUDA_SUPPORT ?= 1
 ifeq ($(CUDA_SUPPORT), 1)
@@ -26,8 +26,8 @@ endif
 CPPFLAGS :=-D NO_FREETYPE
 
 # C/C++ compiler flags
-CFLAGS   :=$(O_LVL)
-CXXFLAGS :=$(CXXFLAGS) $(O_LVL) -std=c++11
+CFLAGS   :=$(O_LVL) $(INCLUDES)
+CXXFLAGS :=$(CXXFLAGS) $(O_LVL) $(INCLUDES) -std=c++11
 
 # Linker flags
 LDFLAGS  :=-lc -lm -lstdc++ -lpng

@@ -23,7 +23,7 @@
 
 
 #include "RPGraphLayout.hpp"
-#include "../lib/pngwriter/src/pngwriter.h"
+#include <pngwriter.h>
 
 #include <fstream>
 #include <cmath>

@@ -87,6 +87,10 @@ int main(int argc, const char **argv)
         {
             out_format = "bin";
         }
+        else if(std::string(argv[arg_no]) == "json")
+        {
+            out_format = "json";
+        }
     }
 
 
@@ -160,7 +164,8 @@ int main(int argc, const char **argv)
                 layout.writeToCSV(op);
             else if (out_format == "bin")
                 layout.writeToBin(op);
-
+            else if (out_format == "json")
+                layout.writeToJson(op);
             printf("done.\n");
         }
 
