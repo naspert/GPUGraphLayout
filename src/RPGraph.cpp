@@ -37,8 +37,10 @@ namespace RPGraph
         edge_count = graph_input["edges"].Size();
         for (auto& v : graph_input["edges"].GetArray()) {
             nid_t s, t;
-            s = v["source"].GetInt();
-            t = v["target"].GetInt();
+            
+            s = std::stoi(v["source"].GetString());
+            t = std::stoi(v["target"].GetString());
+
             if (s != t && !has_edge(s, t)) add_edge(s, t);
         }
         

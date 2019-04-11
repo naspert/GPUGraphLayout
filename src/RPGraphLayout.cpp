@@ -249,9 +249,9 @@ namespace RPGraph
         out_file.close();
     }
 
-	void GraphLayout::writeToJson(std::string path)
-	{
+    void GraphLayout::writeToJson(std::string path)
+    {
 
-	}
+    }
 
 }

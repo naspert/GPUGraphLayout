@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <string>
 #include <math.h>
+#include <fstream>
+#include <rapidjson/istreamwrapper.h>
 
 #include "RPCommon.hpp"
 #include "RPGraph.hpp"
@@ -69,6 +71,7 @@ int main(int argc, const char **argv)
     const char *out_path = argv[9];
     bool is_json;
     std::string json_txt;
+    
     Document d;
     std::string out_format = "png";
     int image_w = 1250;
@@ -112,11 +115,11 @@ int main(int argc, const char **argv)
         fprintf(stderr, "error: No edgelist at %s\n", edgelist_path);
         exit(EXIT_FAILURE);
     }
-    if (!is_file_exists(out_path))
+    /*if (!is_file_exists(out_path))
     {
         fprintf(stderr, "error: No output folder at %s\n", out_path);
         exit(EXIT_FAILURE);
-    }
+    }*/
 
     // If not compiled with cuda support, check if cuda is requested.
     #ifndef __NVCC__
@@ -127,14 +130,18 @@ int main(int argc, const char **argv)
     }
     #endif
     is_json = is_file_json(edgelist_path);
-    if (is_json) {
-        json_txt = read_file(edgelist_path);
-        //auto v = d.Parse(json_txt.c_str());
-    }
-    // Load graph.
+    
+    
     printf("Loading edgelist at '%s'...", edgelist_path);
+    // Load graph.
+    if (is_json) {
+        std::ifstream ifs(edgelist_path);
+        
+        IStreamWrapper isw(ifs);
+        d.ParseStream(isw);
+    }
     fflush(stdout);
-    RPGraph::UGraph graph = is_json ? RPGraph::UGraph(d.Parse(json_txt.c_str())): RPGraph::UGraph(edgelist_path);
+    RPGraph::UGraph graph = is_json ? RPGraph::UGraph(d): RPGraph::UGraph(edgelist_path);
     printf("done.\n");
     printf("    fetched %d nodes and %d edges.\n", graph.num_nodes(), graph.num_edges());
 

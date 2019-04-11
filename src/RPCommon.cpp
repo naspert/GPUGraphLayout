@@ -42,12 +42,7 @@ bool is_file_json(const char* filename)
     return (c == '{');
 }
 
-std::string& read_file(const char *filename)
-{
-    std::ifstream infile(filename);
-    std::string str((std::istreambuf_iterator<char>(infile)), std::istreambuf_iterator<char>());
-    return str;
-}
+
 
 namespace RPGraph
 {
