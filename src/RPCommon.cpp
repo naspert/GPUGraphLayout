@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include <fstream>
+#include <streambuf>
 
 // by http://stackoverflow.com/a/19841704
 bool is_file_exists (const char *filename)
@@ -33,12 +34,34 @@ bool is_file_exists (const char *filename)
     return infile.good();
 }
 
+bool is_file_json(const char* filename) 
+{
+    char c;
+    std::ifstream infile(filename);
+    infile >> c;
+    return (c == '{');
+}
+
+std::string& read_file(const char *filename)
+{
+    std::ifstream infile(filename);
+    std::string str((std::istreambuf_iterator<char>(infile)), std::istreambuf_iterator<char>());
+    return str;
+}
+
 namespace RPGraph
 {
+#ifndef WIN32
     float get_random(float lowerbound, float upperbound)
     {
         return lowerbound + (upperbound-lowerbound) * static_cast <float> (random()) / static_cast <float> (RAND_MAX);
     }
+#else
+	float get_random(float lowerbound, float upperbound)
+	{
+		return lowerbound + (upperbound - lowerbound) * static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	}
+#endif
 
 
     /* Definitions for Real2DVector */

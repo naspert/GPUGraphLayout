@@ -64,6 +64,7 @@ namespace RPGraph
         void writeToPNG(const int image_w, const int image_h, std::string path);
         void writeToCSV(std::string path);
         void writeToBin(std::string path);
+		void writeToJson(std::string path);
     };
 }
 

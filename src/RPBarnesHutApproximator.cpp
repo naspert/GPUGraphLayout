@@ -110,7 +110,7 @@ namespace RPGraph
 
     void BarnesHutApproximator::insertParticle(RPGraph::Coordinate particle_position, float particle_mass)
     {
-        if(not root_cell)
+        if(!root_cell)
         {
             root_cell = new BarnesHutCell(this->root_center, this->root_length,
                                           particle_position, particle_mass);
@@ -123,8 +123,8 @@ namespace RPGraph
             {
                 const int quadrant_new_particle = (particle_position-cur_cell->cell_center).quadrant();
 
-                if (particle_position.y > cur_cell->ub or particle_position.x > cur_cell->rb or
-                    particle_position.x < cur_cell->lb or particle_position.y < cur_cell->bb)
+                if (particle_position.y > cur_cell->ub || particle_position.x > cur_cell->rb ||
+                    particle_position.x < cur_cell->lb || particle_position.y < cur_cell->bb)
                 {
                     //fprintf(stderr, "error: Barnes-Hut: Can't insert particle out of bounds of this cell.\n");
                     return;

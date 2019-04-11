@@ -24,6 +24,8 @@
 #ifndef RPCommonUtils_hpp
 #define RPCommonUtils_hpp
 
+#include <string>
+
 #ifdef __NVCC__
 #include <cuda_runtime_api.h>
 #include <stdio.h>
@@ -40,7 +42,8 @@ inline void assert_d(cudaError_t code, const char *file, int line, bool abort=tr
 }
 #endif
 bool is_file_exists (const char *filename);
-
+bool is_file_json(const char* filename);
+std::string& read_file(const char* filename);
 namespace RPGraph
 {
     float get_random(float lowerbound, float upperbound);

@@ -431,9 +431,9 @@ void SummarizationKernel(const int nnodesd, const int nbodiesd, volatile int * _
     // iterate over all cells assigned to thread
     while (k <= nnodesd)
     {
-        if (k < nbodiesd and body_massd[k] >= 0.0f)
+        if (k < nbodiesd && body_massd[k] >= 0.0f)
             k += inc;
-        else if(k >= nbodiesd and node_massd[k] >= 0.0f)
+        else if(k >= nbodiesd && node_massd[k] >= 0.0f)
             k += inc;
 
         else

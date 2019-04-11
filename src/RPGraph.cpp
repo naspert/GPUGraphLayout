@@ -31,17 +31,20 @@
 
 namespace RPGraph
 {
-    UGraph::UGraph(json &json_object)
+    UGraph::UGraph(Document &json_document): graph_input(json_document)
     {
-        graph_input = json_object;
-        node_count = graph_input.at("nodes").size();
-        edge_count = graph_input.at("edges").size();
-        for (auto& x: graph_input.at("edges").items())
-        {
+        node_count = graph_input["nodes"].Size();
+        edge_count = graph_input["edges"].Size();
+        for (auto& v : graph_input["edges"].GetArray()) {
+            nid_t s, t;
+            s = v["source"].GetInt();
+            t = v["target"].GetInt();
+            if (s != t && !has_edge(s, t)) add_edge(s, t);
         }
+        
     }
     /* Definitions for UGraph */
-    UGraph::UGraph(std::string edgelist_path)
+    UGraph::UGraph(std::string edgelist_path): graph_input(Document())
     {
         node_count = 0;
         edge_count = 0;
@@ -58,7 +61,7 @@ namespace RPGraph
             nid_t s, t;
             std::istringstream(line) >> s >> t;
 
-            if(s != t and !has_edge(s, t)) add_edge(s, t);
+            if(s != t && !has_edge(s, t)) add_edge(s, t);
         }
 
         edgelist_file.close();
@@ -71,7 +74,7 @@ namespace RPGraph
 
     bool UGraph::has_edge(nid_t s, nid_t t)
     {
-        if(!has_node(s) or !has_node(t)) return false;
+        if(!has_node(s) || !has_node(t)) return false;
 
         nid_t s_mapped = node_map[s];
         nid_t t_mapped = node_map[t];
