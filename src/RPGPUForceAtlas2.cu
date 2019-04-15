@@ -40,13 +40,24 @@ namespace RPGraph
     : ForceAtlas2(layout, use_barneshut, strong_gravity, gravity, scale)
     {
         int deviceCount;
-        cudaGetDeviceCount(&deviceCount);
+        
+        cudaCatchError(cudaGetDeviceCount(&deviceCount));
         if (deviceCount == 0)
         {
             fprintf(stderr, "error: No CUDA devices found.\n");
             exit(EXIT_FAILURE);
         }
+        cudaCatchError(cudaSetDevice(0));
+        // GPU initialization and setup //
+        cudaDeviceProp deviceProp;
+        cudaCatchError(cudaGetDeviceProperties(&deviceProp, 0));
 
+        if (deviceProp.warpSize != WARPSIZE)
+        {
+            printf("Warpsize of device is %d, but we anticipated %d\n", deviceProp.warpSize, WARPSIZE);
+            exit(EXIT_FAILURE);
+
+        }
         // Host initialization and setup //
         nbodies = layout.graph.num_nodes();
         nedges  = layout.graph.num_edges();
@@ -83,16 +94,7 @@ namespace RPGraph
             }
         }
 
-        // GPU initialization and setup //
-        cudaDeviceProp deviceProp;
-        cudaGetDeviceProperties(&deviceProp, 0);
-
-        if (deviceProp.warpSize != WARPSIZE)
-        {
-            printf("Warpsize of device is %d, but we anticipated %d\n", deviceProp.warpSize, WARPSIZE);
-            exit(EXIT_FAILURE);
-
-        }
+        
         cudaFuncSetCacheConfig(BoundingBoxKernel, cudaFuncCachePreferShared);
         cudaFuncSetCacheConfig(TreeBuildingKernel, cudaFuncCachePreferL1);
         cudaFuncSetCacheConfig(ClearKernel1, cudaFuncCachePreferL1);

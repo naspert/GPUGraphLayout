@@ -27,6 +27,8 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
 #include "RPGraph.hpp"
 
 namespace RPGraph
@@ -144,6 +146,25 @@ namespace RPGraph
         return adjacency_list[nid];
     }
 
+    void UGraph::SetCoordinates(const Coordinate *coords) 
+    {
+
+        for (auto& v : graph_input["nodes"].GetArray()) 
+        {
+            nid_t id = std::stoi(v["id"].GetString());
+            nid_t idx = node_map[id];
+            v.AddMember("x", coords[idx].x, graph_input.GetAllocator());
+            v.AddMember("y", coords[idx].y, graph_input.GetAllocator());
+        }
+    }
+
+    void UGraph::WriteToJson(std::string &path) 
+    {
+        std::ofstream ofs(path);
+        rapidjson::OStreamWrapper osw(ofs);
+        rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+        graph_input.Accept(writer);
+    }
     /* Definitions for CSRUGraph */
 
 // CSRUGraph represents an undirected graph using a
@@ -236,4 +257,6 @@ namespace RPGraph
     {
         return edge_count;
     }
+
+    void CSRUGraph::SetCoordinates(const Coordinate *coords){}
 };

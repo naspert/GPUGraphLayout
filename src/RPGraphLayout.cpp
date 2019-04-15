@@ -251,7 +251,8 @@ namespace RPGraph
 
     void GraphLayout::writeToJson(std::string path)
     {
-
+        graph.SetCoordinates(coordinates);
+        graph.WriteToJson(path);
     }
 
 }

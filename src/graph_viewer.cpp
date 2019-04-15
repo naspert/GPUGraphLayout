@@ -45,6 +45,26 @@
 #include "RPGPUForceAtlas2.hpp"
 #endif
 
+void save_intermediate_folder(std::string& edgelist_path, std::string& out_path, std::string& out_format, const int iteration,
+                              const int max_iterations, const int image_w, const int image_h,
+                              RPGraph::ForceAtlas2* fa2, RPGraph::GraphLayout& layout)
+{
+    std::string ip(edgelist_path);
+    std::string of = ip.substr(ip.find_last_of('/'));
+    of.append("_").append(std::to_string(iteration)).append(".").append(out_format);
+    std::string op = std::string(out_path).append("/").append(of);
+    printf("Starting iteration %d (%.2f%%), writing %s...", iteration, 100 * (float)iteration / max_iterations, out_format.c_str());
+    fflush(stdout);
+    fa2->sync_layout();
+
+    if (out_format == "png")
+        layout.writeToPNG(image_w, image_h, op);
+    else if (out_format == "csv")
+        layout.writeToCSV(op);
+    else if (out_format == "bin")
+        layout.writeToBin(op);
+}
+
 int main(int argc, const char **argv)
 {
 #ifndef WIN32
@@ -167,22 +187,21 @@ int main(int argc, const char **argv)
         // If we need to, write the result to a png
         if (num_screenshots > 0 && (iteration % snap_period == 0 || iteration == max_iterations))
         {
-            std::string ip(edgelist_path);
-            std::string of = ip.substr(ip.find_last_of('/'));
-            of.append("_").append(std::to_string(iteration)).append(".").append(out_format);
-            std::string op = std::string(out_path).append("/").append(of);
-            printf("Starting iteration %d (%.2f%%), writing %s...", iteration, 100*(float)iteration/max_iterations, out_format.c_str());
-            fflush(stdout);
-            fa2->sync_layout();
+            
+            
+            if (out_format == "json") 
+            {
+                printf("Starting iteration %d (%.2f%%), writing %s...", iteration, 100 * (float)iteration / max_iterations, out_format.c_str());
+                fflush(stdout);
+                fa2->sync_layout();
+                layout.writeToJson(out_path);
+            }
+            else 
+            {
+                save_intermediate_folder(std::string(edgelist_path), std::string(out_path), out_format, iteration,
+                    max_iterations, image_w, image_h, fa2, layout);
+            }
 
-            if (out_format == "png")
-                layout.writeToPNG(image_w, image_h, op);
-            else if (out_format == "csv")
-                layout.writeToCSV(op);
-            else if (out_format == "bin")
-                layout.writeToBin(op);
-            else if (out_format == "json")
-                layout.writeToJson(op);
             printf("done.\n");
         }
 

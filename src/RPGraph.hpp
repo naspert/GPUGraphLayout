@@ -28,6 +28,7 @@
 #include <string>
 #include <unordered_map>
 #include <rapidjson/document.h>
+#include "RPCommon.hpp"
 
 using namespace rapidjson;
 
@@ -51,6 +52,7 @@ namespace RPGraph
             virtual nid_t in_degree(nid_t nid) = 0;
             virtual nid_t out_degree(nid_t nid) = 0;
             virtual std::vector<nid_t> neighbors_with_geq_id(nid_t nid) = 0;
+            virtual void SetCoordinates(const Coordinate *coords) = 0;
 
     };
 
@@ -83,6 +85,8 @@ namespace RPGraph
         virtual nid_t out_degree(nid_t nid) override;
 
         std::vector<nid_t> neighbors_with_geq_id(nid_t nid) override;
+        virtual void SetCoordinates(const Coordinate *coords) override;
+        void WriteToJson(std::string& path);
     };
 
     // Compressed sparserow (CSR) for undirected graphs.
@@ -113,6 +117,8 @@ namespace RPGraph
         virtual nid_t out_degree(nid_t nid) override;
 
         nid_t nbr_id_for_node(nid_t nid, nid_t nbr_no);
+
+        virtual void SetCoordinates(const Coordinate *coords) override;
     };
 }
 
