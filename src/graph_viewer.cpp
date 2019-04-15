@@ -45,7 +45,7 @@
 #include "RPGPUForceAtlas2.hpp"
 #endif
 
-void save_intermediate_folder(std::string& edgelist_path, std::string& out_path, std::string& out_format, const int iteration,
+void save_intermediate_folder(const char* edgelist_path, const char* out_path, std::string& out_format, const int iteration,
                               const int max_iterations, const int image_w, const int image_h,
                               RPGraph::ForceAtlas2* fa2, RPGraph::GraphLayout& layout)
 {
@@ -161,7 +161,7 @@ int main(int argc, const char **argv)
         d.ParseStream(isw);
     }
     fflush(stdout);
-    RPGraph::UGraph graph = is_json ? RPGraph::UGraph(d): RPGraph::UGraph(edgelist_path);
+    RPGraph::UGraph graph = is_json ? RPGraph::UGraph(d): RPGraph::UGraph(edgelist_path, d);
     printf("done.\n");
     printf("    fetched %d nodes and %d edges.\n", graph.num_nodes(), graph.num_edges());
 
@@ -198,7 +198,7 @@ int main(int argc, const char **argv)
             }
             else 
             {
-                save_intermediate_folder(std::string(edgelist_path), std::string(out_path), out_format, iteration,
+                save_intermediate_folder(edgelist_path, out_path, out_format, iteration,
                     max_iterations, image_w, image_h, fa2, layout);
             }
 

@@ -33,7 +33,7 @@
 
 namespace RPGraph
 {
-    UGraph::UGraph(Document &json_document): graph_input(json_document)
+    UGraph::UGraph(Document& json_document): graph_input(json_document)
     {
         node_count = graph_input["nodes"].Size();
         edge_count = graph_input["edges"].Size();
@@ -48,7 +48,7 @@ namespace RPGraph
         
     }
     /* Definitions for UGraph */
-    UGraph::UGraph(std::string edgelist_path): graph_input(Document())
+    UGraph::UGraph(std::string edgelist_path, Document& dummy_json_document): graph_input(dummy_json_document)
     {
         node_count = 0;
         edge_count = 0;
