@@ -4,7 +4,7 @@ CC:=gcc
 L_SRC_DIR         := ../../lib
 SRC_DIR           := ../../src
 OBJ_DIR           := obj
-INCLUDES 	  	  := -I$(L_SRC_DIR)/pngwriter/src -I$(L_SRC_DIR)/json/single_include
+INCLUDES 	  	  := -I$(L_SRC_DIR)/pngwriter/src -I$(L_SRC_DIR)/rapidjson/include
 # Compile with CUDA support by default
 CUDA_SUPPORT ?= 1
 ifeq ($(CUDA_SUPPORT), 1)
