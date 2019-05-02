@@ -33,10 +33,11 @@
 
 namespace RPGraph
 {
-    UGraph::UGraph(Document& json_document): graph_input(json_document)
+    UGraph::UGraph(Document& json_document): graph_input(json_document), node_count(0), edge_count(0)
     {
-        node_count = graph_input["nodes"].Size();
-        edge_count = graph_input["edges"].Size();
+        auto node_count_file = graph_input["nodes"].Size();
+        auto edge_count_file = graph_input["edges"].Size();
+        
         for (auto& v : graph_input["edges"].GetArray()) {
             nid_t s, t;
             
@@ -45,7 +46,7 @@ namespace RPGraph
 
             if (s != t && !has_edge(s, t)) add_edge(s, t);
         }
-        
+        assert(node_count == node_count_file && edge_count == edge_count_file);
     }
     /* Definitions for UGraph */
     UGraph::UGraph(std::string edgelist_path, Document& dummy_json_document): graph_input(dummy_json_document)
